@@ -18,170 +18,198 @@ export default function Support() {
   const handleSubmit = (e) => {
     e.preventDefault()
     setSubmitted(true)
-    setTimeout(() => setSubmitted(false), 3000)
+
+    setTimeout(() => {
+      setSubmitted(false)
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
+      })
+    }, 3000)
   }
 
   const faqs = [
     {
       question: 'How do I book a ride?',
-      answer: 'Navigate to the "Book Ride" section, select your pickup location and destination, and choose your preferred bus from the available options.',
+      answer: 'Navigate to the "Book Ride" section, select your pickup location and destination, and choose your preferred bus.',
     },
     {
       question: 'Can I track my bus in real-time?',
-      answer: 'Yes! Go to the "Live Tracking" page to see all active buses on the campus network with their current locations and ETAs.',
+      answer: 'Yes, use the Live Tracking page to see bus locations and ETAs.',
     },
     {
       question: 'How can I cancel my booking?',
-      answer: 'You can cancel your booking from the Dashboard within 15 minutes of your scheduled departure. A full refund will be issued.',
+      answer: 'You can cancel from the Dashboard within 15 minutes of departure.',
     },
     {
-      question: 'What is the peak travel time?',
-      answer: 'Peak hours are typically between 7-9 AM and 5-7 PM on weekdays. We recommend booking in advance during these times.',
-    },
-    {
-      question: 'Are there group discounts?',
-      answer: 'Yes, groups of 5 or more can receive a 10% discount. Contact our support team for group booking details.',
-    },
-    {
-      question: 'What if my bus is delayed?',
-      answer: 'You will receive an SMS notification about the delay. If the delay exceeds 15 minutes, you can choose an alternative bus or claim a travel credit.',
+      question: 'What are peak hours?',
+      answer: 'Typically 7–9 AM and 5–7 PM on weekdays.',
     },
   ]
 
   return (
-    <div className="min-h-screen bg-gray-100 py-12">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-14">
       <div className="max-w-7xl mx-auto px-6">
-        <h1 className="text-3xl font-bold text-dark mb-2">Support & Help</h1>
-        <p className="text-gray-600 mb-12">Get assistance with any issues or questions</p>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          <div className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-lg transition-shadow">
-            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 00.948-.684l1.498-4.493a1 1 0 011.502-.684l1.498 4.493a1 1 0 00.948.684H19a2 2 0 012 2v2a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" />
-              </svg>
-            </div>
-            <h3 className="font-bold text-dark mb-2">Phone Support</h3>
-            <p className="text-gray-600 text-sm mb-3">+1 (555) 123-4567</p>
-            <p className="text-xs text-gray-500">Available 24/7</p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-lg transition-shadow">
-            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-            </div>
-            <h3 className="font-bold text-dark mb-2">Email Support</h3>
-            <p className="text-gray-600 text-sm mb-3">transport@university.edu</p>
-            <p className="text-xs text-gray-500">Response within 2 hours</p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-lg transition-shadow">
-            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-6-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h8z" />
-              </svg>
-            </div>
-            <h3 className="font-bold text-dark mb-2">Live Chat</h3>
-            <p className="text-gray-600 text-sm mb-3">In-app chat support</p>
-            <p className="text-xs text-gray-500">7 AM - 9 PM daily</p>
-          </div>
+        {/* HEADER */}
+        <div className="mb-12 text-center">
+          <h1 className="text-4xl font-bold text-dark mb-3">Support & Help</h1>
+          <p className="text-gray-600 text-lg">
+            We’re here to help you with anything related to KiitBus
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <div>
-            <div className="bg-white rounded-xl shadow-md p-8">
-              <h2 className="text-2xl font-bold text-dark mb-6">Send us a Message</h2>
+        {/* CONTACT OPTIONS */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-14">
+          <SupportCard title="Phone Support" value="+91 98765 43210" note="24/7 Available" />
+          <SupportCard title="Email Support" value="transport@kiit.ac.in" note="Response in 2 hrs" />
+          <SupportCard title="Live Chat" value="In-App Chat" note="7 AM – 9 PM" />
+        </div>
 
-              {submitted && (
-                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3">
-                  <svg className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <div>
-                    <p className="font-semibold text-green-900">Message sent!</p>
-                    <p className="text-sm text-green-700">We'll get back to you shortly.</p>
-                  </div>
+        {/* FORM + FAQ */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+          {/* FORM CARD */}
+          <div className="relative bg-white rounded-2xl shadow-lg p-10 overflow-hidden">
+
+            {/* Gradient top bar */}
+            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-yellow-400 to-orange-400"></div>
+
+            <h2 className="text-2xl font-bold text-dark mb-6">
+              Send us a Message
+            </h2>
+
+            {/* SUCCESS */}
+            {submitted && (
+              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex gap-3 animate-fade-in">
+                <div className="w-9 h-9 bg-green-100 rounded-full flex items-center justify-center animate-bounce">
+                  ✅
                 </div>
-              )}
-
-              <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-dark mb-2">Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 border border-slate rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="Your name"
-                  />
+                  <p className="font-semibold text-green-900">
+                    Message sent successfully!
+                  </p>
+                  <p className="text-sm text-green-700">
+                    Our support team will contact you shortly.
+                  </p>
                 </div>
+              </div>
+            )}
 
-                <div>
-                  <label className="block text-sm font-semibold text-dark mb-2">Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 border border-slate rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="Your email"
-                  />
-                </div>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <AnimatedInput
+                label="Name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Your name"
+                required
+              />
 
-                <div>
-                  <label className="block text-sm font-semibold text-dark mb-2">Subject</label>
-                  <input
-                    type="text"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 border border-slate rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="How can we help?"
-                  />
-                </div>
+              <AnimatedInput
+                label="Email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="your.email@kiit.ac.in"
+                required
+              />
 
-                <div>
-                  <label className="block text-sm font-semibold text-dark mb-2">Message</label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows="5"
-                    className="w-full px-4 py-3 border border-slate rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-                    placeholder="Tell us more..."
-                  ></textarea>
-                </div>
+              <AnimatedInput
+                label="Subject"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                placeholder="How can we help?"
+                required
+              />
 
-                <button
-                  type="submit"
-                  className="w-full bg-primary text-dark font-semibold px-6 py-3 rounded-lg hover:bg-yellow-400 transition-colors"
-                >
-                  Send Message
-                </button>
-              </form>
-            </div>
+              <div>
+                <label className="block text-sm font-semibold text-dark mb-2">
+                  Message
+                </label>
+                <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  rows="5"
+                  required
+                  className="w-full px-4 py-3 border border-slate rounded-xl resize-none
+                             focus:outline-none focus:ring-2 focus:ring-primary
+                             transition-all duration-200 hover:border-primary"
+                  placeholder="Describe your issue..."
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-primary to-yellow-400
+                           text-dark font-bold px-6 py-4 rounded-xl
+                           hover:scale-[1.02] active:scale-[0.97]
+                           transition-transform duration-200 shadow-md hover:shadow-lg"
+              >
+                Send Message
+              </button>
+            </form>
           </div>
 
+          {/* FAQ */}
           <div>
-            <h2 className="text-2xl font-bold text-dark mb-6">Frequently Asked Questions</h2>
+            <h2 className="text-2xl font-bold text-dark mb-6">
+              Frequently Asked Questions
+            </h2>
+
             <div className="space-y-4">
               {faqs.map((faq, idx) => (
-                <div key={idx} className="bg-white rounded-lg shadow-md p-4 border-l-4 border-primary">
-                  <h4 className="font-semibold text-dark mb-2">{faq.question}</h4>
-                  <p className="text-sm text-gray-600">{faq.answer}</p>
+                <div
+                  key={idx}
+                  className="bg-white rounded-xl shadow-md p-5 border-l-4 border-primary hover:shadow-lg transition"
+                >
+                  <h4 className="font-semibold text-dark mb-2">
+                    {faq.question}
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    {faq.answer}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
+
         </div>
       </div>
+    </div>
+  )
+}
+
+/* ---------------- Helper Components ---------------- */
+
+function AnimatedInput({ label, ...props }) {
+  return (
+    <div className="group">
+      <label className="block text-sm font-semibold text-dark mb-2">
+        {label}
+      </label>
+      <input
+        {...props}
+        className="w-full px-4 py-3 border border-slate rounded-xl
+                   focus:outline-none focus:ring-2 focus:ring-primary
+                   transition-all duration-200
+                   group-hover:border-primary"
+      />
+    </div>
+  )
+}
+
+function SupportCard({ title, value, note }) {
+  return (
+    <div className="bg-white rounded-2xl shadow-md p-6 text-center hover:shadow-lg transition">
+      <div className="text-primary text-2xl font-bold mb-2">{title}</div>
+      <p className="text-dark font-semibold">{value}</p>
+      <p className="text-xs text-gray-500 mt-1">{note}</p>
     </div>
   )
 }

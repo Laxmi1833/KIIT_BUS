@@ -2,36 +2,58 @@ import { useEffect, useState } from "react";
 import API_BASE from "../apiBase";
 
 export default function Drivers() {
-  // Holds the list of drivers returned by the backend
   const [drivers, setDrivers] = useState([]);
+  const [deletingId, setDeletingId] = useState(null);
 
-  // Fetch driver details from admin-only endpoint
   const fetchDrivers = async () => {
     try {
       const res = await fetch(`${API_BASE}/admin/getDriverDetails`, {
-        credentials: "include", // required to send auth cookie
-        headers: {
-          "Content-Type": "application/json",
-        },
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
       });
 
-      // If backend blocks the request (401 / 403), handle it explicitly
-      if (!res.ok) {
-        throw new Error(`Request failed with status ${res.status}`);
-      }
-
+      if (!res.ok) throw new Error(`Status ${res.status}`);
       const data = await res.json();
-      setDrivers(data);
+      setDrivers(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Failed to fetch drivers:", err.message);
-      setDrivers([]); // fallback to empty state
+      setDrivers([]);
     }
   };
 
-  // Load driver data once when component mounts
   useEffect(() => {
     fetchDrivers();
   }, []);
+
+  // DELETE DRIVER
+  const handleDelete = async (driverId, driverName) => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to remove driver "${driverName}"?`
+    );
+    if (!confirmDelete) return;
+
+    try {
+      setDeletingId(driverId);
+
+      const res = await fetch(
+        `${API_BASE}/admin/deleteDriver/${driverId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+
+      if (!res.ok) throw new Error(`Delete failed (${res.status})`);
+
+      // Remove driver from UI instantly
+      setDrivers((prev) => prev.filter((d) => d.id !== driverId));
+    } catch (err) {
+      console.error("Failed to delete driver:", err.message);
+      alert("Failed to delete driver. Please try again.");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 py-12">
@@ -50,13 +72,16 @@ export default function Drivers() {
                 <th className="px-6 py-4 text-sm text-gray-600">Driver</th>
                 <th className="px-6 py-4 text-sm text-gray-600">Phone</th>
                 <th className="px-6 py-4 text-sm text-gray-600">Vehicle</th>
-                <th className="px-6 py-4 text-sm text-gray-600">Driver's Status</th>
+                <th className="px-6 py-4 text-sm text-gray-600">Status</th>
+                <th className="px-6 py-4 text-sm text-gray-600 text-center">
+                  Action
+                </th>
               </tr>
             </thead>
 
             <tbody>
-              {drivers.map((d, index) => (
-                <tr key={index} className="border-b last:border-none">
+              {drivers.map((d) => (
+                <tr key={d.id} className="border-b last:border-none">
                   <td className="px-6 py-4 font-semibold text-dark">
                     {d.name}
                   </td>
@@ -69,29 +94,43 @@ export default function Drivers() {
                     {d.vehicle || "Unassigned"}
                   </td>
 
-                  {/* Backend sends boolean status (b.active) */}
                   <td
-                    className={`px-6 py-4 font-semibold ${d.status === "active"
+                    className={`px-6 py-4 font-semibold ${
+                      d.status === "active"
                         ? "text-green-600"
                         : d.status === "idle"
-                          ? "text-yellow-600"
-                          : "text-red-600"
-                      }`}
+                        ? "text-yellow-600"
+                        : "text-red-600"
+                    }`}
                   >
                     {d.status === "active"
                       ? "Active"
                       : d.status === "idle"
-                        ? "Idle"
-                        : "Maintenance"}
+                      ? "Idle"
+                      : "Maintenance"}
+                  </td>
+
+                  <td className="px-6 py-4 text-center">
+                    <button
+                      onClick={() => handleDelete(d.id, d.name)}
+                      disabled={deletingId === d.id}
+                      className={`px-4 py-2 rounded-lg text-sm font-semibold transition
+                        ${
+                          deletingId === d.id
+                            ? "bg-gray-300 cursor-not-allowed"
+                            : "bg-red-600 text-white hover:bg-red-700"
+                        }`}
+                    >
+                      {deletingId === d.id ? "Deleting..." : "Delete"}
+                    </button>
                   </td>
                 </tr>
               ))}
 
-              {/* Empty state when no drivers are returned */}
               {drivers.length === 0 && (
                 <tr>
                   <td
-                    colSpan="4"
+                    colSpan="5"
                     className="px-6 py-4 text-center text-gray-500"
                   >
                     No drivers found
