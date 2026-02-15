@@ -1,236 +1,126 @@
-import { useState } from 'react'
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Button } from '../components/ui/Button';
+import { Send, AlertTriangle, CheckCircle } from 'lucide-react';
 
 export default function Complaints() {
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
-    busNumber: '',
-    date: '',
-    title: '',
-    description: '',
-    category: '',
-  })
-
-  const [submitted, setSubmitted] = useState(false)
-
-  const categories = [
-    'Bus Condition',
-    'Driver Behavior',
-    'Schedule Delay',
-    'Safety Issue',
-    'Lost and Found',
-    'Other',
-  ]
-
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    roll: '',
+    category: 'Bus Delay',
+    message: ''
+  });
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    setSubmitted(true)
-
+    e.preventDefault();
+    // Simulate API call
     setTimeout(() => {
-      setSubmitted(false)
-      setFormData({
-        name: '',
-        email: '',
-        busNumber: '',
-        date: '',
-        title: '',
-        description: '',
-        category: '',
-      })
-    }, 3000)
+      setSubmitted(true);
+    }, 1000);
+  };
+
+  if (submitted) {
+    return (
+      <div className="min-h-[calc(100vh-4rem)] bg-slate-50 flex items-center justify-center px-4">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="bg-white rounded-2xl shadow-xl p-12 text-center max-w-md border border-slate-100"
+        >
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600">
+            <CheckCircle className="w-8 h-8" />
+          </div>
+          <h2 className="text-2xl font-bold text-slate-900 mb-2">Complaint Registered</h2>
+          <p className="text-slate-500 mb-8">
+            Your Ticket ID #89283 has been created. We will get back to you shortly.
+          </p>
+          <Button onClick={() => setSubmitted(false)} variant="outline">
+            Submit Another
+          </Button>
+        </motion.div>
+      </div>
+    )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-14">
-      <div className="max-w-4xl mx-auto px-6">
-
-        {/* HEADER */}
-        <div className="mb-10 text-center">
-          <h1 className="text-4xl font-bold text-dark mb-3">
-            File a Complaint
-          </h1>
-          <p className="text-gray-600 text-lg">
-            Help us improve campus transportation services
-          </p>
+    <div className="min-h-[calc(100vh-4rem)] bg-slate-50 py-12 px-4 md:px-8">
+      <div className="max-w-2xl mx-auto">
+        <div className="text-center mb-10">
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">File a Complaint</h1>
+          <p className="text-slate-500 mt-2">Report issues regarding bus services, staff, or facilities.</p>
         </div>
 
-        {/* FORM CARD */}
-        <div className="relative bg-white rounded-2xl shadow-lg p-10 overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white rounded-2xl shadow-xl border border-slate-100 p-8"
+        >
+          <div className="flex items-center gap-3 mb-8 p-4 bg-amber-50 rounded-lg text-amber-800 border border-amber-100">
+            <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+            <p className="text-sm">Please provide accurate details to help us resolve details faster.</p>
+          </div>
 
-          {/* Gradient Accent */}
-          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-yellow-400 to-orange-400"></div>
-
-          {/* SUCCESS MESSAGE */}
-          {submitted && (
-            <div className="mb-8 p-5 bg-green-50 border border-green-200 rounded-xl flex gap-4 animate-fade-in">
-              <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center animate-bounce">
-                ✅
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Full Name</label>
+                <input
+                  type="text"
+                  required
+                  className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition-all"
+                  placeholder="John Doe"
+                  value={formData.name}
+                  onChange={e => setFormData({ ...formData, name: e.target.value })}
+                />
               </div>
               <div>
-                <p className="font-semibold text-green-900 text-lg">
-                  Complaint submitted successfully!
-                </p>
-                <p className="text-sm text-green-700">
-                  Reference ID: #COMP-{Math.floor(Math.random() * 10000)}
-                </p>
-                <p className="text-sm text-green-700">
-                  Our team will review this within 48 hours.
-                </p>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Roll Number</label>
+                <input
+                  type="text"
+                  required
+                  className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition-all"
+                  placeholder="2105..."
+                  value={formData.roll}
+                  onChange={e => setFormData({ ...formData, roll: e.target.value })}
+                />
               </div>
-            </div>
-          )}
-
-          {/* FORM */}
-          <form onSubmit={handleSubmit} className="space-y-7">
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <AnimatedInput
-                label="Your Name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Enter your name"
-                required
-              />
-
-              <AnimatedInput
-                label="Email Address"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="your.email@university.edu"
-                required
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <AnimatedInput
-                label="Bus Number (optional)"
-                name="busNumber"
-                value={formData.busNumber}
-                onChange={handleChange}
-                placeholder="UT-205"
-              />
-
-              <AnimatedInput
-                label="Date of Incident"
-                name="date"
-                type="date"
-                value={formData.date}
-                onChange={handleChange}
-                required
-              />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-dark mb-2">
-                Complaint Category
-              </label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Issue Category</label>
               <select
-                name="category"
+                className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition-all bg-white"
                 value={formData.category}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 border border-slate rounded-xl
-                           focus:outline-none focus:ring-2 focus:ring-primary
-                           transition-all duration-200 hover:border-primary"
+                onChange={e => setFormData({ ...formData, category: e.target.value })}
               >
-                <option value="">Select a category</option>
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
+                <option>Bus Delay</option>
+                <option>Staff Misbehavior</option>
+                <option>Rash Driving</option>
+                <option>Maintenance Issue</option>
+                <option>Other</option>
               </select>
             </div>
 
-            <AnimatedInput
-              label="Complaint Title"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              placeholder="Brief summary of the issue"
-              required
-            />
-
             <div>
-              <label className="block text-sm font-semibold text-dark mb-2">
-                Detailed Description
-              </label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Description</label>
               <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                rows="6"
+                rows="4"
                 required
-                className="w-full px-4 py-3 border border-slate rounded-xl resize-none
-                           focus:outline-none focus:ring-2 focus:ring-primary
-                           transition-all duration-200 hover:border-primary"
-                placeholder="Describe what happened, including location and time..."
-              />
+                className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition-all resize-none"
+                placeholder="Describe the incident in detail..."
+                value={formData.message}
+                onChange={e => setFormData({ ...formData, message: e.target.value })}
+              ></textarea>
             </div>
 
-            <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-4">
-              <p className="text-sm text-blue-700">
-                🔒 Your complaint is confidential and reviewed only by authorized transport staff.
-              </p>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-gradient-to-r from-primary to-yellow-400
-                         text-dark font-bold px-6 py-4 rounded-xl
-                         hover:scale-[1.02] active:scale-[0.97]
-                         transition-transform duration-200 shadow-md hover:shadow-lg"
-            >
+            <Button type="submit" size="lg" className="w-full bg-slate-900 hover:bg-slate-800">
+              <Send className="w-4 h-4 mr-2" />
               Submit Complaint
-            </button>
+            </Button>
           </form>
-        </div>
-
-        {/* STATS */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
-          <StatCard title="24/7" subtitle="Support Available" />
-          <StatCard title="48h" subtitle="Response Time" />
-          <StatCard title="100%" subtitle="Confidential" />
-        </div>
+        </motion.div>
       </div>
     </div>
-  )
-}
-
-/* ---------------- Helper Components ---------------- */
-
-function AnimatedInput({ label, ...props }) {
-  return (
-    <div className="group">
-      <label className="block text-sm font-semibold text-dark mb-2">
-        {label}
-      </label>
-      <input
-        {...props}
-        className="w-full px-4 py-3 border border-slate rounded-xl
-                   focus:outline-none focus:ring-2 focus:ring-primary
-                   transition-all duration-200
-                   group-hover:border-primary"
-      />
-    </div>
-  )
-}
-
-function StatCard({ title, subtitle }) {
-  return (
-    <div className="bg-white rounded-2xl shadow-md p-6 text-center hover:shadow-lg transition">
-      <div className="text-3xl font-bold text-primary mb-2">
-        {title}
-      </div>
-      <p className="text-gray-600 font-semibold">{subtitle}</p>
-    </div>
-  )
+  );
 }

@@ -1,117 +1,179 @@
-import { Link, useLocation } from 'react-router-dom'
-import { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { Button } from './ui/Button';
+import { Menu, X, Bus, User, LogOut } from 'lucide-react';
+import { cn } from '../lib/utils';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Navbar() {
-  const location = useLocation()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { user, role, logout } = useAuth();
+  const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navItems = [
-    { label: 'Show Buses', path: '/' },
-    { label: 'Live Tracking', path: '/live-tracking' },
-    { label: 'Routes', path: '/routes' },
-    { label: 'Support', path: '/support' },
-    { label: 'Complaints', path: '/complaints' },
-  ]
+  const getNavItems = () => {
+    switch (role) {
+      case 'student':
+        return [
+          { label: 'Find Bus', path: '/student' },
+          { label: 'Live Tracking', path: '/student/live-tracking' },
+          { label: 'My Routes', path: '/student/routes' },
+          { label: 'Support', path: '/student/support' },
+          { label: 'Complaints', path: '/student/complaints' },
+        ];
+      case 'driver':
+        return [
+          { label: 'Dashboard', path: '/driver' },
+          //   { label: 'My Schedule', path: '/driver/schedule' },
+        ];
+      case 'admin':
+        return [
+          { label: 'Dashboard', path: '/admin' },
+          { label: 'Vehicles', path: '/admin/vehicles' },
+          { label: 'Drivers', path: '/admin/drivers' },
+        ];
+      default:
+        return [
+          { label: 'Home', path: '/' },
+          //   { label: 'Track Bus', path: '/student/live-tracking' }, // Redirect to student tracking if public? Or keep hidden
+        ];
+    }
+  };
 
-  const isActive = (path) => location.pathname === path
+  const navItems = getNavItems();
+  const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white border-b border-slate shadow-sm z-50">
-      <div className="max-w-7xl mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          {/* LOGO */}
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <rect x="1" y="6" width="22" height="12" rx="2"></rect>
-                <circle cx="7" cy="19" r="2"></circle>
-                <circle cx="17" cy="19" r="2"></circle>
-              </svg>
-            </div>
-            <span className="text-xl font-bold text-dark">KiitBus</span>
-          </Link>
+    <nav className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur-sm">
+      <div className="container mx-auto flex h-16 items-center px-4 md:px-6">
+        <Link to="/" className="mr-8 flex items-center space-x-2">
+          <div className="bg-slate-900 p-1.5 rounded-lg">
+            <Bus className="h-6 w-6 text-amber-500" />
+          </div>
+          <span className="hidden font-bold sm:inline-block text-xl tracking-tight text-slate-900">
+            KiitBus
+          </span>
+        </Link>
 
-          {/* DESKTOP MENU */}
-          <div className="hidden md:flex items-center gap-8">
+        {/* DESKTOP NAV */}
+        <div className="hidden md:flex md:flex-1 items-center justify-between">
+          <nav className="flex items-center space-x-6 text-sm font-medium">
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`font-medium transition-colors ${
-                  isActive(item.path)
-                    ? 'text-dark border-b-2 border-primary'
-                    : 'text-gray-600 hover:text-dark'
-                }`}
+                className={cn(
+                  "transition-colors hover:text-slate-900/80",
+                  isActive(item.path) ? "text-slate-900 font-bold" : "text-slate-500"
+                )}
               >
                 {item.label}
               </Link>
             ))}
+          </nav>
 
-            {/* ADMIN LINK */}
-            <Link
-              to="/admin/login"
-              className={`font-semibold px-4 py-2 rounded-lg transition-colors ${
-                location.pathname.startsWith('/admin')
-                  ? 'bg-primary text-dark'
-                  : 'text-primary hover:bg-yellow-100'
-              }`}
-            >
-              Admin Portal
-            </Link>
-          </div>
-
-          {/* RIGHT ICONS */}
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-yellow-300 flex items-center justify-center font-bold text-dark cursor-pointer">
-              KB
-            </div>
-
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 hover:bg-gray-100 rounded-lg"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+          <div className="flex items-center space-x-4">
+            {user ? (
+              <div className="flex items-center gap-4">
+                <div className="text-right hidden lg:block">
+                  <p className="text-sm font-medium leading-none text-slate-900">{user.name}</p>
+                  <p className="text-xs text-slate-500 capitalize">{role}</p>
+                </div>
+                <div className="relative group">
+                  <div className="h-9 w-9 bg-slate-100 rounded-full flex items-center justify-center border border-slate-200">
+                    <User className="h-5 w-5 text-slate-600" />
+                  </div>
+                </div>
+                <Button variant="ghost" size="sm" onClick={logout} className="text-slate-600 hover:text-red-600 hover:bg-red-50">
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              // If not logged in, we are likely on landing page or need to go there.
+              // We can't link to /login as it doesn't exist.
+              // We'll link to /admin/login for explicit admin login, or just remove if redundant.
+              // But simplified: Link to /admin/login for "Admin Portal" explicitly? 
+              // Or just keep "Sign In" pointing to "/" to let them choose.
+              <Link to="/">
+                <Button variant="default" size="sm" className="bg-slate-900 text-white hover:bg-slate-800 shadow-sm">
+                  Get Started
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
 
-        {/* MOBILE MENU */}
-        {mobileMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 space-y-2 border-t border-slate">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`block px-4 py-2 rounded-lg ${
-                  isActive(item.path)
-                    ? 'bg-primary text-dark font-semibold'
-                    : 'text-gray-600 hover:bg-gray-100'
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
-
-            {/* MOBILE ADMIN LINK */}
-            <Link to="/admin/login"
-  className={`font-bold px-5 py-2 rounded-lg transition-all duration-200
-    ${
-      location.pathname.startsWith('/admin')
-        ? 'bg-gradient-to-r from-red-600 to-orange-500 text-white shadow-lg ring-2 ring-red-400'
-        : 'bg-gradient-to-r from-primary to-yellow-400 text-dark hover:shadow-lg hover:scale-105'
-    }
-  `}
->
-  Admin Portal
-</Link>
-
-
-          </div>
-        )}
+        {/* MOBILE MENU TOGGLE */}
+        <button
+          className="ml-auto md:hidden p-2 text-slate-900"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
       </div>
+
+      {/* MOBILE NAV */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-b bg-white"
+          >
+            <div className="space-y-1 p-4">
+              {navItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    "block px-4 py-3 text-base font-medium rounded-lg transition-colors",
+                    isActive(item.path)
+                      ? "bg-slate-100 text-slate-900"
+                      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  )}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              {user ? (
+                <div className="border-t border-slate-100 mt-4 pt-4">
+                  <div className="flex items-center px-4 mb-4">
+                    <div className="h-8 w-8 bg-slate-100 rounded-full flex items-center justify-center mr-3">
+                      <User className="h-4 w-4 text-slate-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-slate-900">{user.name}</p>
+                      <p className="text-xs text-slate-500 capitalize">{role}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full text-left block px-4 py-3 text-base font-medium text-red-600 hover:bg-red-50 rounded-lg"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <div className="border-t border-slate-100 mt-4 pt-4">
+                  <Link
+                    to="/"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-4 py-3 text-base font-medium text-center bg-slate-900 text-white rounded-lg hover:bg-slate-800"
+                  >
+                    Get Started
+                  </Link>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
-  )
+  );
 }
