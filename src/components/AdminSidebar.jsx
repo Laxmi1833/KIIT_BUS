@@ -92,7 +92,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
     return (
         <>
             {/* Desktop Sidebar */}
-            <div className="hidden md:block w-72 h-screen sticky top-0 border-r border-slate-200 shadow-xl bg-secondary z-40">
+            <div className="hidden md:flex flex-col w-72 h-screen fixed top-0 left-0 border-r border-slate-200 shadow-xl bg-secondary z-40 overflow-hidden">
                 <SidebarContent />
             </div>
 

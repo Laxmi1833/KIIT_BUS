@@ -9,7 +9,7 @@ function AdminLoadingSkeleton() {
   return (
     <div className="flex min-h-screen bg-slate-50">
       {/* Skeleton sidebar */}
-      <div className="hidden md:flex flex-col w-72 h-screen sticky top-0 bg-slate-900/95 p-6 gap-4">
+      <div className="hidden md:flex flex-col w-72 h-screen fixed top-0 left-0 bg-slate-900/95 p-6 gap-4 z-40">
         {/* Logo area */}
         <div className="flex items-center gap-3 mb-4">
           <div className="w-8 h-8 rounded-lg skeleton-shimmer opacity-30" />
@@ -25,7 +25,7 @@ function AdminLoadingSkeleton() {
       </div>
 
       {/* Skeleton content area */}
-      <div className="flex-1 p-6 md:p-10 space-y-6">
+      <div className="flex-1 p-6 md:p-10 space-y-6 md:pl-72">
         {/* Header bar */}
         <div className="flex justify-between items-center mb-8">
           <div className="flex flex-col gap-2">
@@ -84,7 +84,7 @@ export default function AdminGuard() {
     <div className="flex min-h-screen bg-slate-50">
       <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <main className="flex-1 w-full min-w-0 transition-all duration-300">
+      <main className="flex-1 w-full min-w-0 transition-all duration-300 md:pl-72">
         {/* Mobile top bar */}
         <div className="md:hidden h-14 bg-white border-b border-slate-100 flex items-center px-4 justify-between sticky top-0 z-30 shadow-sm">
           <button
