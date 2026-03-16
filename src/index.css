@@ -4,40 +4,94 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply bg-background text-secondary font-sans antialiased transition-colors duration-200 ease-in-out;
+  }
 
+  .dark body {
+    @apply bg-background-dark text-gray-100;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Custom modern scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full hover:bg-slate-400 transition-colors;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-slate-700 hover:bg-slate-600;
+  }
+  
+  /* Text Selection */
+  ::selection {
+    @apply bg-primary/20 text-primary;
+  }
+
+  .dark ::selection {
+    @apply bg-primary/30 text-blue-300;
+  }
+}
 
 @layer utilities {
+  /* Glassmorphism effects */
   .glass {
-    @apply bg-white/70 backdrop-blur-lg border border-white/20;
+    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-soft;
+  }
+  
+  .dark .glass {
+    @apply bg-zinc-900/60 border-white/10;
+  }
+  
+  .glass-card {
+    @apply bg-white/90 backdrop-blur-md border border-slate-100 shadow-soft transition-all duration-300 hover:shadow-float;
+  }
+
+  .dark .glass-card {
+    @apply bg-zinc-900/80 border-white/5;
   }
 
   .glass-dark {
     @apply bg-slate-900/70 backdrop-blur-lg border border-white/10;
   }
 
-  /* Skeleton card loading shimmer */
+  /* Skeleton loading shimmer */
   .skeleton-shimmer {
-    background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 40%, #f1f5f9 80%);
-    background-size: 300% 100%;
+    background: linear-gradient(90deg, 
+      rgba(226, 232, 240, 0.5) 25%, 
+      rgba(241, 245, 249, 0.8) 50%, 
+      rgba(226, 232, 240, 0.5) 75%
+    );
+    background-size: 400% 100%;
     animation: skeleton-sweep 1.5s ease-in-out infinite;
+  }
+
+  .dark .skeleton-shimmer {
+    @apply from-slate-800 via-slate-700 to-slate-800;
+    /* We'll use custom gradient for dark mode below */
+    background: linear-gradient(90deg, 
+      rgba(30, 41, 59, 0.5) 25%, 
+      rgba(51, 65, 85, 0.8) 50%, 
+      rgba(30, 41, 59, 0.5) 75%
+    );
+    background-size: 400% 100%;
   }
 }
 
-* {
-  @apply box-border;
-}
-
-body {
-  @apply bg-gray-50 text-secondary font-sans antialiased;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
+/* Animations that are not defined in tailwind.config.js */
 @keyframes skeleton-sweep {
-  0%   { background-position: 100% center; }
-  100% { background-position: -100% center; }
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 @keyframes fade-in {
@@ -45,7 +99,6 @@ html {
     opacity: 0;
     transform: translateY(-6px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -56,14 +109,9 @@ html {
   animation: fade-in 0.4s ease-out;
 }
 
-@keyframes shrink {
-  from { transform: scaleX(1); }
-  to   { transform: scaleX(0); }
-}
-
 @keyframes scale-in {
   from { opacity: 0; transform: scale(0.95) translateY(8px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 .animate-scale-in {

@@ -40,40 +40,40 @@ export default function Support() {
   ]
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4 md:px-8 pb-24">
+    <div className="min-h-screen bg-background dark:bg-background-dark py-12 px-4 md:px-8 pb-24 transition-colors">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-3xl font-bold text-secondary mb-2">How can we help?</h1>
-          <p className="text-slate-500 max-w-lg mx-auto">Get in touch with our transport team for any queries, lost items, or general assistance.</p>
+          <h1 className="text-3xl font-bold text-secondary dark:text-gray-100 mb-2 tracking-tight">How can we help?</h1>
+          <p className="text-slate-500 dark:text-slate-400 max-w-lg mx-auto font-medium">Get in touch with our transport team for any queries, lost items, or general assistance.</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           {sections.map((s, i) => (
-            <Card key={i} className="text-center !p-8 border-0 shadow-lg shadow-slate-200/50" hover delay={i * 0.1}>
-              <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Card key={i} className="text-center !p-8 border-0 shadow-soft glass-card" hover delay={i * 0.1}>
+              <div className="w-16 h-16 bg-primary/10 dark:bg-primary/20 text-primary rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-sm">
                 <s.icon size={28} />
               </div>
-              <h3 className="font-bold text-secondary mb-1">{s.title}</h3>
-              <p className="text-primary font-bold text-lg mb-1">{s.value}</p>
-              <p className="text-xs text-slate-400 font-medium uppercase tracking-wider">{s.sub}</p>
+              <h3 className="font-bold text-secondary dark:text-gray-100 mb-1">{s.title}</h3>
+              <p className="text-primary dark:text-primary font-bold text-lg mb-1">{s.value}</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest">{s.sub}</p>
             </Card>
           ))}
         </div>
 
         <div className="grid lg:grid-cols-2 gap-10">
           {/* Contact Form */}
-          <Card className="!p-8 border-0 shadow-xl shadow-slate-200/50">
+          <Card className="!p-8 border-0 shadow-card glass-card">
             <div className="mb-6">
-              <h3 className="text-xl font-bold text-secondary">Send a Message</h3>
-              <p className="text-slate-500 text-sm">We usually respond within a few hours.</p>
+              <h3 className="text-xl font-bold text-secondary dark:text-gray-100">Send a Message</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">We usually respond within a few hours.</p>
             </div>
 
             {submitted ? (
-              <div className="bg-emerald-50 text-emerald-800 p-6 rounded-xl flex items-center gap-4">
-                <div className="bg-white p-2 rounded-full shadow-sm"><Send size={20} /></div>
+              <div className="bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 p-6 rounded-2xl flex items-center gap-4 animate-scale-in border border-emerald-100 dark:border-emerald-500/20">
+                <div className="bg-white dark:bg-zinc-900 p-2.5 rounded-full shadow-sm text-emerald-600 dark:text-emerald-500"><Send size={24} /></div>
                 <div>
-                  <p className="font-bold">Message Sent!</p>
-                  <p className="text-sm">We'll get back to you shortly.</p>
+                  <p className="font-bold text-lg">Message Sent!</p>
+                  <p className="text-sm font-medium opacity-90">We'll get back to you shortly.</p>
                 </div>
               </div>
             ) : (
@@ -84,34 +84,34 @@ export default function Support() {
                 </div>
                 <Input label="Subject" name="subject" value={formData.subject} onChange={handleChange} required placeholder="Topic of inquiry" />
                 <div>
-                  <label className="block text-sm font-bold text-secondary mb-2">Message</label>
+                  <label className="block text-sm font-bold text-secondary dark:text-gray-200 mb-2">Message</label>
                   <textarea
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
                     rows="4"
                     required
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-secondary font-medium resize-none"
+                    className="w-full px-4 py-3 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-slate-700/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/40 focus:border-primary dark:focus:border-primary transition-all text-secondary dark:text-gray-100 font-medium resize-none placeholder:text-slate-400 shadow-sm"
                     placeholder="How can we help you today?"
                   />
                 </div>
-                <Button type="submit" variant="primary" className="w-full" isLoading={loading} icon={Send}>Send Message</Button>
+                <Button type="submit" variant="primary" className="w-full mt-2" isLoading={loading} icon={Send}>Send Message</Button>
               </form>
             )}
           </Card>
 
           {/* FAQ Preview */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-secondary px-2">Common Questions</h3>
+            <h3 className="text-xl font-bold text-secondary dark:text-gray-100 px-2 mb-6">Common Questions</h3>
             {[
               { q: "How do I see live bus location?", a: "Go to the 'Live Tracking' tab and select your route number." },
               { q: "Can I book a seat in advance?", a: "Yes, use the 'Select Route' page to find and book available seats up to 24h in advance." },
               { q: "What if I lose something on the bus?", a: "Please file a 'Lost and Found' report in the Complaints section or contact us immediately." },
               { q: "Are the timings accurate?", a: "Bus timings are updated daily. Live tracking provides the most accurate real-time ETA." }
             ].map((item, idx) => (
-              <Card key={idx} className="!p-5 border-l-4 border-l-primary/20 hover:border-l-primary transition-colors cursor-pointer">
-                <h4 className="font-bold text-secondary mb-2 text-sm">{item.q}</h4>
-                <p className="text-slate-500 text-sm leading-relaxed">{item.a}</p>
+              <Card key={idx} hover className="!p-5 border-l-4 !border-l-primary/20 hover:!border-l-primary transition-colors cursor-pointer border-0 shadow-soft glass-card">
+                <h4 className="font-bold text-secondary dark:text-gray-100 mb-2 text-sm">{item.q}</h4>
+                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed font-medium">{item.a}</p>
               </Card>
             ))}
           </div>

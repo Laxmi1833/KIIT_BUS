@@ -10,15 +10,15 @@ const Button = ({
     icon: Icon,
     ...props
 }) => {
-    const baseStyles = "inline-flex items-center justify-center rounded-xl font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none";
+    const baseStyles = "inline-flex items-center justify-center rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-background-dark disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]";
 
     const variants = {
-        primary: "bg-primary text-white hover:bg-blue-700 focus:ring-blue-500 shadow-lg shadow-blue-500/30",
-        secondary: "bg-secondary text-white hover:bg-slate-800 focus:ring-slate-500 shadow-lg shadow-slate-900/20",
-        outline: "border-2 border-slate-200 hover:bg-slate-50 text-slate-700",
-        ghost: "hover:bg-slate-100 text-slate-600 hover:text-slate-900",
-        danger: "bg-red-500 text-white hover:bg-red-600 focus:ring-red-500 shadow-lg shadow-red-500/30",
-        success: "bg-accent text-white hover:bg-emerald-600 focus:ring-emerald-500 shadow-lg shadow-emerald-500/30",
+        primary: "bg-primary text-white hover:bg-primary-hover focus:ring-primary/50 shadow-soft hover:shadow-primary/30",
+        secondary: "bg-secondary text-white dark:bg-slate-800 dark:hover:bg-slate-700 hover:bg-secondary-hover focus:ring-slate-500 shadow-soft hover:shadow-slate-900/20 dark:hover:shadow-black/40",
+        outline: "border-2 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200",
+        ghost: "hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white",
+        danger: "bg-danger text-white hover:bg-danger-hover focus:ring-danger/50 shadow-soft hover:shadow-danger/30",
+        success: "bg-accent text-white hover:bg-accent-hover focus:ring-accent/50 shadow-soft hover:shadow-accent/30",
     };
 
     const sizes = {
@@ -30,7 +30,7 @@ const Button = ({
 
     return (
         <motion.button
-            whileTap={{ scale: 0.95 }}
+            whileTap={{ scale: 0.97 }}
             className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
             disabled={isLoading}
             {...props}
