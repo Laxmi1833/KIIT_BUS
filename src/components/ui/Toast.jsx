@@ -79,26 +79,26 @@ function Toast({ toast, onRemove }) {
   return (
     <div
       className={`
-        flex items-start gap-3 bg-white border border-slate-200 border-l-4 ${cfg.borderClass}
-        rounded-xl shadow-lg shadow-slate-200/60 px-4 py-3.5 min-w-[280px] max-w-sm
-        transition-all duration-300 ease-out
+        flex items-start gap-3 bg-surface dark:bg-zinc-900 border border-slate-200 dark:border-slate-800 border-l-4 ${cfg.borderClass}
+        rounded-xl shadow-float px-4 py-3.5 min-w-[280px] max-w-sm
+        transition-all duration-300 ease-out relative overflow-hidden
         ${visible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}
       `}
     >
       <Icon size={19} className={`${cfg.iconClass} mt-0.5 shrink-0`} />
-      <p className="text-sm font-medium text-slate-700 flex-1 leading-tight">{toast.message}</p>
+      <p className="text-sm font-medium text-secondary dark:text-gray-100 flex-1 leading-tight">{toast.message}</p>
       <button
         onClick={() => onRemove(toast.id)}
-        className="text-slate-300 hover:text-slate-500 transition-colors shrink-0"
+        className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors shrink-0"
       >
         <X size={16} />
       </button>
 
       {/* Progress bar */}
-      <div className="absolute bottom-0 left-0 right-0 h-0.5 rounded-b-xl overflow-hidden">
+      <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: 'rgba(0,0,0,0.05)' }}>
         <div
-          className={`h-full ${cfg.barClass} origin-left`}
-          style={{ animation: `shrink ${toast.duration}ms linear forwards` }}
+          className={`h-full ${cfg.barClass} origin-left transition-transform`}
+          style={{ transitionDuration: `${toast.duration}ms`, transitionTimingFunction: 'linear', transform: visible ? 'scaleX(0)' : 'scaleX(1)' }}
         />
       </div>
     </div>
